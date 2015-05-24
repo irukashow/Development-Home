@@ -6,6 +6,7 @@ public function index() {
             $this->ValidateTest->set($this->request->data);
             if ($this->ValidateTest->validates()){
                 echo 'バリデーションOK';
+                $this->Session->setFlash('入力完了');
             } else {
                 echo 'バリデーションNG';
             }

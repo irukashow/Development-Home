@@ -24,6 +24,7 @@ public function index()
   
       // モデルのバリデーションを起動  
       $this->Mail->validates();  
+      $this->Session->setFlash('入力完了');
   
     }  
   }
