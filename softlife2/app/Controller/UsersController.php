@@ -29,8 +29,19 @@ class UsersController extends AppController {
             $name = $this->Auth->user('name_sei').' '.$this->Auth->user('name_mei');
             $this->set('user_name', $name);
             $this->set('name', $name);
+            //$this->set('sessions', $this->Session);
             
-            //$this->render('index');
+            // POSTの場合
+            if ($this->request->is('post')) {
+                // 属性の変更
+                $class = $this->request->data['class'];
+                //$this->Session->setFlash($class);
+                $this->set('selected_class', $class);
+                $this->Session->write('selected_class', $class);
+            } else {
+                $this->set('selected_class', $this->Session->read('selected_class'));
+            }
+
 	}
 	
 	/**
@@ -64,7 +75,7 @@ class UsersController extends AppController {
                 $this->set('user_name', $name);
 
                 // 初期値設定
-                $this->モデル名->virtualFields = array('full_name' => "CONCAT(name_sei , ' ', name_mei)");
+                $this->User->virtualFields = array('full_name' => "CONCAT(name_sei , ' ', name_mei)");
                 $this->set('datas', $this->User->find('list', array('fields' => array('username','full_name'))));
                 //$username = $this->request->data('username');
                 //
@@ -196,7 +207,7 @@ class UsersController extends AppController {
                     // indexに移動する
                     $this->redirect(array('action' => 'index'));
             } else {
-                $this->request->data = $this->User->read(null, $this->Auth->user('username'));    
+                //$this->request->data = $this->User->read(null, $this->Auth->user('username'));    
             }
         }
     

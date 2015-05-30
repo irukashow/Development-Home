@@ -11,12 +11,16 @@
 
 <!-- メインペイン -->
 <div id='message-main'>
+    <table border="0" style="width:100%;">
+        <tr>
+            <td style="width:30%;">
     <!-- メッセージボックス -->
     <div id='message-folder'>
-        フォルダなど
+        <font style="font-size: 120%;color:red;">制作予定</font><br>
     </div>
-
-    <!-- メッセージボックス -->
+            </td>
+            <td style="width:70%;">
+    <!-- メッセージ一覧 -->
     <div id='message-list'>
         <font style='font-weight: bold;font-size: 110%;'>[受信箱]</font>
         <table border='0' id='message-table' cellspacing="0" cellpadding="5" frame="void">
@@ -31,7 +35,7 @@
                     <?php echo $this->Form->input('check',array('type'=>'checkbox','label'=>false)); ?>
                 </td>
                 <td class='message-content'><a href='#' style='text-decoration: none;'>案件Aについての問い合わせ</a></td>
-                <td class='message-content'><a href='#' style='text-decoration: none;'>福島 亜希子</a></td>
+                <td class='message-content'><a href='#' style='text-decoration: none;'>○○ △△子</a></td>
                 <td class='message-content'>2015-07-15 10:27</td>
             </tr>
             <tr>
@@ -39,9 +43,20 @@
                     <?php echo $this->Form->input('check',array('type'=>'checkbox','label'=>false)); ?>
                 </td>
                 <td class='message-content'><a href='#' style='text-decoration: none;'>案件Aについての問い合わせ</a></td>
-                <td class='message-content'><a href='#' style='text-decoration: none;'>福島 亜希子</a></td>
+                <td class='message-content'><a href='#' style='text-decoration: none;'>○○ △△子</a></td>
+                <td class='message-content'>2015-07-15 10:27</td>
+            </tr>
+            <tr>
+                <td style="padding-top: 8px;">
+                    <?php echo $this->Form->input('check',array('type'=>'checkbox','label'=>false)); ?>
+                </td>
+                <td class='message-content'><a href='#' style='text-decoration: none;'>案件Aについての問い合わせ</a></td>
+                <td class='message-content'><a href='#' style='text-decoration: none;'>○○ △△子</a></td>
                 <td class='message-content'>2015-07-15 10:27</td>
             </tr>
         </table>
     </div>
+                </td>
+        </tr>
+    </table>
 </div>

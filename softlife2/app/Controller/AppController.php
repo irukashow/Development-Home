@@ -31,6 +31,7 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
+    public $uses = array('User', 'Item');
     public $components = array(
 		'Session',
 		'Auth' => array(
@@ -41,6 +42,12 @@ class AppController extends Controller {
     public function beforeFilter() {
         // 認証コンポーネントをViewで利用可能にしておく
         $this->set('auth',$this->Auth);
+        
+        // 種別のセット
+        $username = $this->Auth->user('username');
+        $conditions = array('username' => $username);
+        $result = $this->User->find('first', array('conditions' => $conditions));
+        $this->set('result', $result);
     }
     
     public function isAuthorized($user) {
@@ -51,4 +58,11 @@ class AppController extends Controller {
         // デフォルトは拒否
         return false;
     }
+    
+    // 項目テーブルからの値変換関数
+    public function getValue($item, $id) {
+        $conditions = array('item' => $item, 'id' => $id);
+        $value = $this->Item->find('first', array('conditions' => $conditions));
+        return $value;
+    } 
 }

@@ -4,7 +4,11 @@
     echo $this->Html->script('jquery-1.9.1');
     echo $this->Html->script('station');
 ?>
-
+<?php
+    // 初期値セット
+    $created = date('Y/m/d', strtotime($datas['StuffMaster']['created']));
+    $modified = date('Y/m/d', strtotime($datas['StuffMaster']['modified']));
+?>
 <!-- for Datepicker -->
 <link type="text/css" rel="stylesheet"
   href="http://code.jquery.com/ui/1.10.3/themes/cupertino/jquery-ui.min.css" />
@@ -25,8 +29,22 @@ $(function() {
 
 <div style="width:90%;margin-top: 20px;margin-left: auto; margin-right: auto;">
     <fieldset style="border:none;margin-bottom: 20px;">
-        <legend style="font-size: 150%;color: red;"><?php echo __('スタッフ登録 （評価関連）'); ?></legend>
+        <table border="0" style="width: 100%;height: 20px;">
+            <tr>
+                <td>
+                    <div style="font-size: 150%;color: red;float:left;"><?php echo __('スタッフ登録 （評価関連）'); ?></div>
+                </td>
+                <td style="float: right;">
+                    <?php print($this->Html->link('終了する', '', 
+                            array('class'=>'button-rink','style' => 'margin:0px;', 'onclick' => 'window.opener.location.reload();window.close();'))); ?>
+                </td>
+            </tr>
+        </table>
+        <div style="clear: both;height: 0px;"></div>
+        
 <?php echo $this->Form->create('StuffMaster', array('name' => 'form','enctype' => 'multipart/form-data','id' => 'regist')); ?>
+<?php echo $this->Form->input('id', array('type'=>'hidden', 'value' => $stuff_id)); ?>  
+<?php echo $this->Form->input('username', array('type'=>'hidden', 'value' => $username)); ?>
         
         <!-- スタッフ情報 -->
         <table border='1' cellspacing="0" cellpadding="5" style='width: 100%;margin-top: 10px;border-spacing: 1px;'>
@@ -35,8 +53,8 @@ $(function() {
             </tr>
             <tr>
                 <td colspan="2">
-                    No.<?='0001' ?>&nbsp;&nbsp;登録番号：<?='0001' ?>&nbsp;&nbsp;
-                    作成日：<?='2015-06-01' ?>&nbsp;&nbsp;更新日：<?='2015-06-01' ?>&nbsp;&nbsp;所属：<?='大阪-人材派遣' ?>
+                    No.<?='0001' ?>&nbsp;&nbsp;登録番号：<?=$stuff_id ?>&nbsp;&nbsp;
+                    作成日：<?=$created ?>&nbsp;&nbsp;更新日：<?=$modified ?>&nbsp;&nbsp;所属：<?='大阪-人材派遣' ?>
                 </td>
             </tr>
         </table>
@@ -63,8 +81,8 @@ $(function() {
                 <td>
                 <?php
                     $list1=array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5');
-                    echo $this->Form->input( 'hyoujou', array('legend' => false, 'type' => 'radio','div'=>'radio',
-                        'options' => $list1, 'value'=>'3'));
+                    echo $this->Form->input( 'hyouka_hyoujou', array('legend' => false, 'type' => 'radio','div'=>'radio',
+                        'options' => $list1));
                 ?>
                 </td>
             </tr>
@@ -73,8 +91,8 @@ $(function() {
                 <td>
                 <?php
                     $list2=array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5');
-                    echo $this->Form->input( 'hassei', array('legend' => false, 'type' => 'radio','div'=>'radio',
-                        'options' => $list1, 'value'=>'3'));
+                    echo $this->Form->input( 'hyouka_hassei', array('legend' => false, 'type' => 'radio','div'=>'radio',
+                        'options' => $list1));
                 ?>
                 </td>
             </tr>
@@ -83,8 +101,8 @@ $(function() {
                 <td>
                 <?php
                     $list3=array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5');
-                    echo $this->Form->input( 'akarusa', array('legend' => false, 'type' => 'radio','div'=>'radio',
-                        'options' => $list1, 'value'=>'3'));
+                    echo $this->Form->input( 'hyouka_akarusa', array('legend' => false, 'type' => 'radio','div'=>'radio',
+                        'options' => $list1));
                 ?>
                 </td>
             </tr>
@@ -93,8 +111,8 @@ $(function() {
                 <td>
                 <?php
                     $list4=array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5');
-                    echo $this->Form->input( 'hanayakasa', array('legend' => false, 'type' => 'radio','div'=>'radio',
-                        'options' => $list1, 'value'=>'3'));
+                    echo $this->Form->input( 'hyouka_hanayakasa', array('legend' => false, 'type' => 'radio','div'=>'radio',
+                        'options' => $list1));
                 ?>
                 </td>
             </tr>
@@ -103,8 +121,8 @@ $(function() {
                 <td>
                 <?php
                     $list5=array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5');
-                    echo $this->Form->input( 'seiryoukan', array('legend' => false, 'type' => 'radio','div'=>'radio',
-                        'options' => $list1, 'value'=>'3'));
+                    echo $this->Form->input( 'hyouka_seiketsukan', array('legend' => false, 'type' => 'radio','div'=>'radio',
+                        'options' => $list1));
                 ?>
                 </td>
             </tr>
@@ -113,8 +131,8 @@ $(function() {
                 <td>
                 <?php
                     $list6=array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5');
-                    echo $this->Form->input( 'make', array('legend' => false, 'type' => 'radio','div'=>'radio',
-                        'options' => $list1, 'value'=>'3'));
+                    echo $this->Form->input( 'hyouka_make', array('legend' => false, 'type' => 'radio','div'=>'radio',
+                        'options' => $list1));
                 ?>
                 </td>
             </tr>
@@ -123,8 +141,8 @@ $(function() {
                 <td>
                 <?php
                     $list7=array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5');
-                    echo $this->Form->input( 'hairstyle', array('legend' => false, 'type' => 'radio','div'=>'radio',
-                        'options' => $list1, 'value'=>'3'));
+                    echo $this->Form->input( 'hyouka_hairstyle', array('legend' => false, 'type' => 'radio','div'=>'radio',
+                        'options' => $list1));
                 ?>
                 </td>
             </tr>
@@ -133,8 +151,8 @@ $(function() {
                 <td>
                 <?php
                     $list8=array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5');
-                    echo $this->Form->input( 'shisei', array('legend' => false, 'type' => 'radio','div'=>'radio',
-                        'options' => $list1, 'value'=>'3'));
+                    echo $this->Form->input( 'hyouka_shisei', array('legend' => false, 'type' => 'radio','div'=>'radio',
+                        'options' => $list1));
                 ?>
                 </td>
             </tr>
@@ -143,8 +161,8 @@ $(function() {
                 <td>
                 <?php
                     $list9=array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5');
-                    echo $this->Form->input( 'shosa', array('legend' => false, 'type' => 'radio','div'=>'radio',
-                        'options' => $list1, 'value'=>'3'));
+                    echo $this->Form->input( 'hyouka_shosa', array('legend' => false, 'type' => 'radio','div'=>'radio',
+                        'options' => $list1));
                 ?>
                 </td>
             </tr>
@@ -153,8 +171,8 @@ $(function() {
                 <td>
                 <?php
                     $list10=array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5');
-                    echo $this->Form->input( 'juunansa', array('legend' => false, 'type' => 'radio','div'=>'radio',
-                        'options' => $list1, 'value'=>'3'));
+                    echo $this->Form->input( 'hyouka_juunansa', array('legend' => false, 'type' => 'radio','div'=>'radio',
+                        'options' => $list1));
                 ?>
                 </td>
             </tr>
@@ -163,8 +181,8 @@ $(function() {
                 <td>
                 <?php
                     $list11=array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5');
-                    echo $this->Form->input( 'hakihaki', array('legend' => false, 'type' => 'radio','div'=>'radio',
-                        'options' => $list1, 'value'=>'3'));
+                    echo $this->Form->input( 'hyouka_hakihaki', array('legend' => false, 'type' => 'radio','div'=>'radio',
+                        'options' => $list1));
                 ?>
                 </td>
             </tr>
@@ -173,8 +191,8 @@ $(function() {
                 <td>
                 <?php
                     $list12=array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5');
-                    echo $this->Form->input( 'kyouryoku', array('legend' => false, 'type' => 'radio','div'=>'radio',
-                        'options' => $list1, 'value'=>'3'));
+                    echo $this->Form->input( 'hyouka_kyouryoku', array('legend' => false, 'type' => 'radio','div'=>'radio',
+                        'options' => $list1));
                 ?>
                 </td>
             </tr>
@@ -183,14 +201,14 @@ $(function() {
                 <td>
                 <?php
                     $list13=array('1'=>'1','2'=>'2','3'=>'3','4'=>'4','5'=>'5');
-                    echo $this->Form->input( 'funiki', array('legend' => false, 'type' => 'radio','div'=>'radio',
-                        'options' => $list1, 'value'=>'3'));
+                    echo $this->Form->input( 'hyouka_funiki', array('legend' => false, 'type' => 'radio','div'=>'radio',
+                        'options' => $list1));
                 ?>
                 </td>
             </tr>
             <tr>
                 <td style='background-color: #e8ffff;width:15%;'>備考</td>
-                <td><?php echo $this->Form->input('remarks',array('type'=>'textarea','div'=>false,'maxlength'=>'200','label'=>false,'style'=>'width:90%;height:50px;')); ?></td> 
+                <td><?php echo $this->Form->input('hyouka_remarks',array('type'=>'textarea','div'=>false,'maxlength'=>'500','label'=>false,'style'=>'width:90%;height:80px;')); ?></td> 
             </tr>
         </table>
          
@@ -198,7 +216,10 @@ $(function() {
     <div style='margin-left: 10px;'>
 <?php echo $this->Form->submit('登録完了', array('name' => 'submit','div' => false)); ?>
     &nbsp;&nbsp;
-<?php print($this->Html->link('戻　る', 'javascript:void(0);', array('class'=>'button-rink', 'onclick'=>'javascript:window.history.back(-1);return false;'))); ?>
+<?php $back_url = '/stuff_masters/reg2/'.$stuff_id; ?>
+<?php print($this->Html->link('戻　る', $back_url, array('class'=>'button-rink'))); ?>
+    &nbsp;&nbsp;
+<?php print($this->Html->link('終了する', '', array('class'=>'button-rink', 'onclick' => 'window.opener.location.reload();window.close();'))); ?>    
     </div>
 <?php echo $this->Form->end(); ?>
 </div>

@@ -7,7 +7,43 @@
         // ログイン画面へ遷移
         //header('Location: login');
         //exit();
-        //echo '<script type="text/javascript">location.href = "/softlife2/users/login/"</script>';
+        //echo '<script type="text/javascript">location.href = "softlife2/users/login/"</script>';
+    }
+    
+    // 種別コンボセット
+    if ($result['User']['auth11'] == 1) {
+        $class = array('11'=>'大阪-人材派遣');
+        $first_class = array('11'=>'大阪-人材派遣');
+    }
+    if ($result['User']['auth12'] == 1) {
+        $class = $class + array('12'=>'大阪-住宅営業');
+        if (is_null($first_class)) {
+            $first_class = array('12'=>'大阪-住宅営業');
+        }
+    }
+    if ($result['User']['auth21'] == 1) {
+        $class = $class + array('21'=>'東京-人材派遣');
+        if (is_null($first_class)) {
+            $first_class = array('21'=>'東京-人材派遣');
+        } 
+    }
+    if ($result['User']['auth22'] == 1) {
+        $class = $class + array('22'=>'東京-住宅営業');
+        if (is_null($first_class)) {
+            $first_class = array('22'=>'東京-住宅営業');
+        }
+    }
+    if ($result['User']['auth31'] == 1) {
+        $class = $class + array('31'=>'名古屋-人材派遣');
+        if (is_null($first_class)) {
+            $first_class = array('31'=>'名古屋-人材派遣');
+        }
+    }
+    if ($result['User']['auth32'] == 1) {
+        $class = $class + array('32'=>'名古屋-住宅営業');
+        if (is_null($first_class)) {
+            $first_class = array('32'=>'名古屋-住宅営業');
+        }
     }
     
 ?>
@@ -21,7 +57,8 @@
     <?php echo $title_for_layout; ?>
   </title>
   <?php
-    echo $this->Html->meta('icon');
+   // echo $this->Html->meta('icon');
+    echo $this->Html->meta('favicon.ico','/favicon.ico',array('type' => 'icon'));
     echo $this->Html->css('main');
     //echo $this->Html->css( 'page');
     //echo $this->Html->css( 'Style');
@@ -52,32 +89,32 @@ $(function() {
 <!-- ヘッダ部分 -->
   <div id="container">
     <div id="header">
-        <table style="width: 100%;height: 40px;">
+        <table style="width: 100%;" border="0">
             <tr>
-                <td>
-                    <a href="/softlife2/users/" class="logo">&nbsp;</a>
+                <td style="width:300px;">
+                    <a href="<?=ROOTDIR ?>/users/" class="logo">&nbsp;</a>
                     <font size="3">
                         <?php echo HEADER; ?>
                     </font>
                 </td>
-                <td style="float: right;">
+                <td>&nbsp;</td>
+                <td style="width:330px;float: right;padding-top: 5px;">
                     <ul  id="menu">
                         <li>リンク <font style='font-size:50%;vertical-align: 2px;'>▼</font>
                             <ul>
-                                <li><a href="#">サブメニュー</a></li>
-                                <li><a href="#">サブメニュー</a></li>
-                                <li><a href="#">サブメニュー</a></li>
+                                <li><a href="http://www.softlife.co.jp/">会社ホームページ</a></li>
+                                <li><a href="http://softlife.co.jp/cb9/ag.cgi?">サイボウズ</a></li>
                             </ul>
                         </li>
-                        <li style="width:150px;">
+                        <li style="width:130px;">
                             <?php
                                 if($auth->loggedIn()){
-                                    echo $user_name.'さん <font style="font-size:50%;vertical-align: 2px;">▼</font>';
+                                    echo '<font style="font-size:100%;">'.$user_name.' </font><font style="font-size:50%;vertical-align: 2px;">▼</font>';
                             ?>
                                 <ul>
-                                    <li><a href="/softlife2/users/passwd">パスワード変更</a></li>
-                                    <li><a href="#">バージョン情報</a></li>
-                                    <li><a href="/softlife2/users/logout">ログアウト</a></li>
+                                    <li><a href="<?=ROOTDIR ?>/users/passwd">パスワード変更</a></li>
+                                    <li><a href="<?=ROOTDIR ?>/menu/version">バージョン情報</a></li>
+                                    <li><a href="<?=ROOTDIR ?>/users/logout">ログアウト</a></li>
                                 </ul>
                             <?php
                                 } else {
@@ -94,20 +131,34 @@ $(function() {
     <div id="content">
       
         <!-- メニュー部分 START -->
-<div id='cssmenu'>
-    <ul>
-        <li class='<?= $active1 ?>'><a href='/softlife2/users/'>ホーム<br><div>Home</div></a></li>
-       <li class='<?= $active2 ?>'><a href='/softlife2/message/'>メッセージ<br><div>Message</div></a></li>
-       <li class='<?= $active3 ?>'><a href='/softlife2/stuff_masters/'>スタッフ管理<br><div>Stuff Management</div></a></li>
-       <li class='<?= $active4 ?>'><a href='/softlife2/case_management/'>案件管理<br><div>Case Management</div></a></li>
-       <li class='<?= $active5 ?>'><a href='#'>その他<br><div>etc</div></a></li>
-       <li class='<?= $active6 ?>'><a href='#'>&nbsp;<br><div>&nbsp;</div></a></li>
-       <li class='<?= $active7 ?>'><a href='#'>&nbsp;<br><div>&nbsp;</div></a></li>
-       <li class='<?= $active8 ?>'><a href='#'>&nbsp;<br><div>&nbsp;</div></a></li>
-       <li class='<?= $active9 ?>'><a href='/softlife2/admin/'>管理者ページ<br><div>Administrator</div></a></li>
-       <li class='<?= $active10 ?>'><a href='#'>&nbsp;<br><div>&nbsp;</div></a></li>
-    </ul>
-    </div>
+        <table border="0" style="width:100%;">
+            <tr>
+                <td>
+                    <div id='cssmenu'>
+                        <ul>
+                            <li class='<?= $active1 ?>'><a href='<?=ROOTDIR ?>/users/'>ホーム<br><div>Home</div></a></li>
+                           <li class='<?= $active2 ?>'><a href='<?=ROOTDIR ?>/message/'>メッセージ<br><div>Message</div></a></li>
+                           <li class='<?= $active3 ?>'><a href='<?=ROOTDIR ?>/stuff_masters/'>スタッフ管理<br><div>Stuff Management</div></a></li>
+                           <li class='<?= $active4 ?>'><a href='<?=ROOTDIR ?>/case_management/'>案件管理<br><div>Case Management</div></a></li>
+                           <li class='<?= $active5 ?>'><a href='#'>その他<br><div>etc</div></a></li>
+                           <li class='<?= $active6 ?>'><a href='#'>&nbsp;<br><div>&nbsp;</div></a></li>
+                           <li class='<?= $active7 ?>'><a href='#'>&nbsp;<br><div>&nbsp;</div></a></li>
+                           <li class='<?= $active8 ?>'><a href='#'>&nbsp;<br><div>&nbsp;</div></a></li>
+                           <li class='<?= $active9 ?>'><a href='<?=ROOTDIR ?>/admin/'>管理者ページ<br><div>Administrator</div></a></li>
+                           <li class='<?= $active10 ?>'><a href='#'>&nbsp;<br><div>&nbsp;</div></a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td style="text-align: center;width:170px;vertical-align: middle;">
+                    <?php echo $this->Form->create('Common', array('name' => 'form')); ?>
+                    <?php echo $this->Form->input('class', array('name'=>'class','type'=>'select','label'=>false,'div'=>false, 
+                        'style' => '','id' => 'class','empty'=>array(0 => '選択してください'), 'selected' => $selected_class,
+                        'onChange'=>'form.submit();', 'options'=>$class)); ?>
+                    <?php echo $this->Form->end(); ?>
+                </td>
+            </tr>
+        </table>
+
         <div style="clear: both;height:10px;">&nbsp;</div>
         <!-- メニュー部分 END -->
         <?php echo $this->Session->flash(); ?>

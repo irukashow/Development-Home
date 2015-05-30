@@ -55,17 +55,22 @@ div.pageNav03 {
 
 div.pageNav03 span {
 float: left;
+padding: 5px 10px;
 //margin: 0 1px 1px 0;
+border:1px solid black;
+border-radius: 5px;
+//background-color: #eef2f0;
 }
 
 div.pageNav03 span a {
 float: left;
-padding: 5px 10px;
+//padding: 5px 10px;
 background: #fff;
 }
 
 span.current{
 float: left;
+font-weight: bold;
 padding: 5px 10px;
 background: #fff;
 }
@@ -106,6 +111,11 @@ table#stuff_master tr th a{
     text-decoration: none;
 }
 
+/** プロフィールへのリンク **/
+a.link_prof {
+text-decoration: none;
+color: blue;
+}
 
 
 

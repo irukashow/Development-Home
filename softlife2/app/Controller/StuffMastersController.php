@@ -13,16 +13,34 @@ App::uses('AppController', 'Controller');
  * @author M-YOKOI
  */
 class StuffMastersController extends AppController {
-    public $uses = array('StuffMaster', 'Item');
-    //Paginationの設定
+    public $uses = array('StuffMaster', 'User', 'Item');
+    // Paginationの設定（スタッフマスタ）
     public $paginate = array(
     //モデルの指定
     'StuffMaster' => array(
     //1ページ表示できるデータ数の設定
     'limit' =>10,
+    'fields' => array('StuffMaster.*', 'User.name_sei AS koushin_name_sei', 'User.name_mei AS koushin_name_mei'),
+    //データを降順に並べる
+    'order' => array('id' => 'asc'),
+    'joins' => array (
+            array (
+                'type' => 'LEFT',
+                'table' => 'users',
+                'alias' => 'User',
+                'conditions' => 'StuffMaster.username = User.username' 
+            ))
+    )); 
+    // Paginationの設定（スタッフ詳細） 
+    public $paginate2 = array (
+    //モデルの指定
+    'StuffMaster' => array(
+    //1ページ表示できるデータ数の設定
+    'limit' =>1,
     //データを降順に並べる
     'order' => array('id' => 'asc'),
     )); 
+    
     public $title_for_layout = "スタッフマスタ - 派遣管理システム";
 
     public function index() {
@@ -49,31 +67,51 @@ class StuffMastersController extends AppController {
         $this->set('pref_arr', $pref_arr); 
 
         // 登録番号で検索
-        if (isset($this->data['txtId'])){
+        if (isset($this->data['txtId']) && !empty($this->data['txtId'])){
             $id = $this->data['txtId'];
             $conditions = array('id' => $id);
             $this->set('datas', $this->paginate('StuffMaster',$conditions));
+            $this->Session->setFlash($this->data['txtId']);
+            
             // 表示ページ単位
             //$this->paginate = array('StuffMaster' => array('limit' => $this->data['optDisplay']));
         // 担当者で検索
-        } elseif (isset($this->data['txtTantou'])){
+        } elseif (isset($this->data['txtTantou']) && !empty($this->data['txtTantou'])){
             $tantou = $this->data['txtTantou'];
             $conditions = array('tantou LIKE ' => $tantou);
-            $this->set('datas', $this->paginate('StuffMaster',$conditions));            
+            $this->set('datas', $this->paginate('StuffMaster',$conditions));      
         } else {
             $this->set('datas', $this->paginate());
+            //$this->redirect(array('action' => '.'));
         }
+        
+        // 表示件数変更
+        
 
         // 以下がデータベース関係
         //$this->set('datas', $this->paginate());
         //$datas = $this->StuffMaster->find('all');
         //$this->set('datas',$datas);
         
+        // POSTの場合
+        if ($this->request->is('post') || $this->request->is('put')) {
+            // 属性の変更
+            if (isset($this->request->data['class'])) {
+                $class = $this->request->data['class'];
+                //$this->Session->setFlash($class);
+                $this->set('selected_class', $class);
+                $this->Session->write('selected_class', $class);
+                //$this->Session->setFlash($class);
+            }
+        } else {
+            $this->set('selected_class', $this->Session->read('selected_class'));
+        }
+        $this->set('selected_class', $this->Session->read('selected_class'));
         
       }
   
     // 登録ページ（その１）
-    public function reg1() {
+    public function reg1($stuff_id = null) {
           // レイアウト関係
           $this->layout = "sub";
           $this->set("title_for_layout", $this->title_for_layout);
@@ -85,70 +123,95 @@ class StuffMastersController extends AppController {
           $conditions = array('item' => 10);
           $pref_arr = $this->Item->find('list', array('fields' => array( 'id', 'value'), 'conditions' => $conditions));
           $this->set('pref_arr', $pref_arr); 
+          $this->set('stuff_id', $stuff_id); 
+          $this->StuffMaster->id = $stuff_id;
+          $this->set('username', $this->Auth->user('username')); 
+          //$this->StuffMaster->id = $stuff_id;
+          // 項目のセット
+          
 
       // post時の処理
       if ($this->request->is('post') || $this->request->is('put')) {
-          $this->redirect(array('action' => 'reg2'));
+            if ($this->StuffMaster->validates() == false) {
+                exit();
+            }
+            if (isset($this->request->data['submit'])) {
+                // モデルの状態をリセットする
+                //$this->StuffMaster->create();
+                // データを登録する
+                if ($this->StuffMaster->save($this->request->data)) {
+                    if (isset($stuff_id)) {
+                    // 登録したIDを取得
+                        $id = $stuff_id;
+                    } else {
+                        $id = $this->StuffMaster->getLastInsertID();
+                    } 
+                    // 登録２にリダイレクト
+                    $this->redirect(array('action' => 'reg2', $id));
+                } else {
+                    $this->Session->setFlash('登録時にエラーが発生しました。');
+                }
+            }
+          
       } else {
-
+          // 登録していた値をセット
+          $this->request->data = $this->StuffMaster->read(null, $stuff_id);
       }
     }
     
     // 登録ページ（その２）
-    public function reg2() {
-          // レイアウト関係
-          $this->layout = "sub";
-          $this->set("title_for_layout",$this->title_for_layout);
-          // 都道府県のセット
-          mb_language("uni");
-          mb_internal_encoding("utf-8"); //内部文字コードを変更
-          mb_http_input("auto");
-          mb_http_output("utf-8");
-          $conditions = array('item' => 10);
-          $pref_arr = $this->Item->find('list', array('fields' => array( 'id', 'value'), 'conditions' => $conditions));
-          $this->set('pref_arr', $pref_arr); 
-          $stuff_no = '34567';
-          $this->set('stuff_no', $stuff_no); 
+    public function reg2($stuff_id = null) {
+        // レイアウト関係
+        $this->layout = "sub";
+        $this->set("title_for_layout",$this->title_for_layout);
+        // 都道府県のセット
+        mb_language("uni");
+        mb_internal_encoding("utf-8"); //内部文字コードを変更
+        mb_http_input("auto");
+        mb_http_output("utf-8");
+        $conditions = array('item' => 10);
+        $pref_arr = $this->Item->find('list', array('fields' => array( 'id', 'value'), 'conditions' => $conditions));
+        $this->set('pref_arr', $pref_arr); 
+        $this->set('stuff_id', $stuff_id); 
+        // 初期値設定
+        $this->set('datas', $this->StuffMaster->find('first', 
+                array('fields' => array('created', 'modified'), 'conditions' => array('id' => $stuff_id) )));
+        $this->set('username', $this->Auth->user('username')); 
 
-        // ファイルアップロード処理
+        // ファイルアップロード処理の初期セット
         $ds = DIRECTORY_SEPARATOR;  //1
-        $storeFolder = 'files/stuff_reg'.$ds.$stuff_no.$ds;   //2
+        $storeFolder = 'files/stuff_reg'.$ds.$stuff_id.$ds;   //2
         
         // post時の処理
         if ($this->request->is('post') || $this->request->is('put')) {
-            /**
-            if(!empty($_FILES['upfile']['name'][0] && !empty($_FILES['upfile']['name'][1]))){
-                // ディレクトリがなければ作る
-                if ($this->chkDirectory($storeFolder, true) == false) {
-                    $this->Session->setFlash('ファイルのアップロードに失敗しました。');
-                    $this->redirect($this->referer());
-                    exit();
-                }
-                $count = count($_FILES['upfile']['name']);
-                for ($i=0; $i<$count; $i++) {
-                    $tempFile = $_FILES['upfile']['tmp_name'][$i];//3
-                    //$info = new SplFileInfo($_FILES['upfile']['name'][$i]);
-                    //$after = $info->getExtension();
-                    $targetPath = $storeFolder.$ds;  //4
-                    $targetFile =  $targetPath. mb_convert_encoding($_FILES['upfile']['name'][$i], 'sjis-win', 'UTF-8');  //5
-                    //$targetFile =  $targetPath.$stuff_no.'.'.$after;  //5
-                    move_uploaded_file($tempFile,$targetFile); //6
-                }
-            } else {
-                $this->Session->setFlash('「証明写真」か「履歴書」のファイルが選択されていません。');
-                $this->redirect($this->referer());
+            if ($this->StuffMaster->validates() == false) {
                 exit();
             }
-            **/
+            if (isset($this->request->data['submit'])) {
+                // モデルの状態をリセットする
+                //$this->StuffMaster->create();
+                // データを登録する
+                if ($this->StuffMaster->save($this->request->data)) {
+                    // 登録したIDを取得
+                    //$id = $this->StuffMaster->getLastInsertID();
+                    // 登録２にリダイレクト
+                    $this->redirect(array('action' => 'reg3', $stuff_id));
+                } else {
+                    $this->Session->setFlash('登録時にエラーが発生しました。');
+                }
+            }
 
-            $this->redirect(array('action' => 'reg3'));
+        } else {
+          // 登録していた値をセット
+          $this->request->data = $this->StuffMaster->read(null, $stuff_id);
+          $this->set('data', $this->request->data);
         }
         
 
     }
     
     // 登録ページ（その３）
-    public function reg3() {
+    public function reg3($stuff_id = null) {
           // レイアウト関係
           $this->layout = "sub";
           $this->set("title_for_layout",$this->title_for_layout);
@@ -160,13 +223,66 @@ class StuffMastersController extends AppController {
           $conditions = array('item' => 10);
           $pref_arr = $this->Item->find('list', array('fields' => array( 'id', 'value'), 'conditions' => $conditions));
           $this->set('pref_arr', $pref_arr); 
+          $this->set('stuff_id', $stuff_id);
+        // 初期値設定
+        $this->set('datas', $this->StuffMaster->find('first', 
+                array('fields' => array('created', 'modified'), 'conditions' => array('id' => $stuff_id) )));
+        $this->set('username', $this->Auth->user('username')); 
 
-      // post時の処理
-      if ($this->request->is('post') || $this->request->is('put')) {
-          $this->redirect(array('action' => 'reg3'));
-      } else {
+        // post時の処理
+        if ($this->request->is('post') || $this->request->is('put')) {
+            if ($this->StuffMaster->validates() == false) {
+                exit();
+            }
+            if (isset($this->request->data['submit'])) {
+                // モデルの状態をリセットする
+                //$this->StuffMaster->create();
+                // データを登録する
+                if ($this->StuffMaster->save($this->request->data)) {
+                    // 登録したIDを取得
+                    //$id = $this->StuffMaster->getLastInsertID();
+                    // 登録完了メッセージ
+                    $this->Session->setFlash('登録がすべて完了しました。');
+                } else {
+                    $this->Session->setFlash('登録時にエラーが発生しました。');
+                }
+            }
 
-      }
+        } else {
+          // 登録していた値をセット
+          $this->request->data = $this->StuffMaster->read(null, $stuff_id);
+        }
+    }
+    
+    // プロフィールページ
+    public function profile($stuff_id = null) {
+          // レイアウト関係
+          $this->layout = "sub";
+          $this->set("title_for_layout",$this->title_for_layout);
+          // 都道府県のセット
+          mb_language("uni");
+          mb_internal_encoding("utf-8"); //内部文字コードを変更
+          mb_http_input("auto");
+          mb_http_output("utf-8");
+          $conditions = array('item' => 10);
+          $pref_arr = $this->Item->find('list', array('fields' => array( 'id', 'value'), 'conditions' => $conditions));
+          $this->set('pref_arr', $pref_arr); 
+          $this->set('id', $stuff_id); 
+
+        // ページネーション
+        if (isset($stuff_id)){
+            $conditions = array('id' => $stuff_id);
+            $this->set('datas', $this->paginate('StuffMaster',$conditions));
+        } else {
+            $this->Session->setFlash('ページ表示時にエラーが発生しました。');
+        }
+        
+        // post時の処理
+        if ($this->request->is('post') || $this->request->is('put')) {
+            $this->redirect(array('action' => 'reg1', $stuff_id));
+        } else {
+
+        }
     }
   
   public function edit($id) {

@@ -25,7 +25,7 @@
             名前<br>
             <!-- 名前コンボの値セット START -->
             <?php
-                echo $this->Form->input( 'username', array('label' => false,'type' => 'select','style'=>'width: 100%;', 
+                echo $this->Form->input( 'username', array('label' => false,'type' => 'select','style'=>'width: 100%;font-size:120%;', 
                     'options' => $datas, 'empty' => '(あなたのお名前)'));
             ?>
             <!-- 名前コンボの値セット END -->
