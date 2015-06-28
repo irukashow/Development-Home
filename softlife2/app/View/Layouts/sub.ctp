@@ -1,15 +1,30 @@
-<?php
-    if($auth->loggedIn())
-    {
-        //echo $this->Html->link('ログアウト', '/users/logout/');
-    }else{
-        //echo $this->Html->link('ログイン', '/users/login/');
-        // ログイン画面へ遷移
-        //header('Location: login');
-        //exit();
-        //echo '<script type="text/javascript">location.href = "/softlife2/users/login/"</script>';
-    }
+<?php 
+    // 所属カンマ区切りを配列に
+    $value = explode(',', $result['User']['auth']);
+    //$this->log($value);
+    // 所属コンボセット
+    foreach($value as $val) {
+        if ($val == '11') {
+            $class['11'] = '大阪-人材派遣';
+        }
+        if ($val == '12') {
+            $class['12'] = '大阪-住宅営業';
+        }
+        if ($val == '21') {
+            $class['21'] = '東京-人材派遣';
+        }
+        if ($val == '22') {
+            $class['22'] = '東京-住宅営業';
+        }
+        if ($val == '31') {
+            $class['31'] = '名古屋-人材派遣';
+        }
+        if ($val == '32') {
+            $class['32'] = '名古屋-住宅営業';
+        }   
+    } 
 ?>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -52,9 +67,9 @@ $(function() {
     <div id="header">
         <table style="width: 100%;height: 40px;">
             <tr>
-                <td style="padding-top: 11px;">
-                    <a href="/softlife2/users/" class="logo">&nbsp;</a>
-                    <font size="3">
+                <td style="width:350px;padding-top: 7px;">
+                    <a href="<?=ROOTDIR ?>/users/"><img src="<?=ROOTDIR ?>/img/logo.gif" /></a>
+                    <font size="3" style="vertical-align: 8px;">
                         <?php echo HEADER; ?>
                     </font>
                 </td>

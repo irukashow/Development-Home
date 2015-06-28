@@ -1,11 +1,4 @@
 <?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 App::uses('AppController', 'Controller');
 
 /**
@@ -13,6 +6,8 @@ App::uses('AppController', 'Controller');
  * @author M-YOKOI
  */
 class MenuController extends AppController {
+    public $uses = array('Menu', 'VersionRemarks');
+    public $paginate = array('VersionRemarks' => array('order' => array('id' => 'desc')));
 
     public function index() {
         
@@ -20,11 +15,14 @@ class MenuController extends AppController {
 
     public function version() {
         // レイアウト関係
-        $this->layout = "sub";
-        $this->set("title_for_layout","バージョン更新情報 - 派遣管理システム");
+        $this->layout = "log";
+        $this->set("title_for_layout", $this->title_for_layout);
+        $this->set("headline", 'バージョン更新履歴');
+        // テーブルの設定
+        //$this->VersionRemarks->setSource('version_remarks');
         
         // 初期値設定
         //$this->set('datas', $this->Menu->find('all'));
-        $this->set('datas',$this->paginate());
+        $this->set('datas', $this->paginate());
     }
 }

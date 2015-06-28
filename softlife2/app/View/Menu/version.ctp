@@ -15,28 +15,36 @@
 ?>
 <?php echo $this->Form->create('Menu'); ?>
 
+<div style="padding: 15px;">
+    <div style="float:left;">
+        <font style="font-size: 150%;color: red;"><?= $headline ?></font>
+    </div>
+    <div style="float:right;">
+        <a href='<?=ROOTDIR ?>/admin/'>◀ホームへ戻る</a>
+    </div>
+    <div style="clear:both;"></div>
+    
 <!-- ページネーション -->
-<div class="pageNav03" style="margin: 10px;">
 <?php
-	echo $this->Paginator->first('<< 最初', array(), null, array('class' => 'first disabled'));
-	echo $this->Paginator->prev('< 前へ', array(), null, array('class' => 'prev disabled'));
-	echo $this->Paginator->numbers(array('separator' => ''));
-	echo $this->Paginator->next('次へ >', array(), null, array('class' => 'next disabled'));
-        echo $this->Paginator->last('最後 >>', array(), null, array('class' => 'last disabled'));
+    echo $this->Paginator->numbers (
+        array (
+            'before' => $this->Paginator->hasPrev() ? $this->Paginator->first('<<').' | ' : '',
+            'after' => $this->Paginator->hasNext() ? ' | '.$this->Paginator->last('>>') : '',
+            )
+        );
 ?>
- </div>
 
 <!--- スタッフマスタ本体 START --->
-<table id="stuff_master" border="1" width="100%" cellspacing="0" cellpadding="5" bordercolor="#333333" align="center">
-  <tr>
-      <th><?php echo $this->Paginator->sort('id',"No.");?></th>
-      <th><?php echo $this->Paginator->sort('version_no','バージョン番号');?></th>
-      <th><?php echo $this->Paginator->sort('status','ステータス');?></th>
-      <th><?php echo $this->Paginator->sort('title','更新タイトル');?></th>
-    <th><?php echo $this->Paginator->sort('remarks','更新内容');?></th>
-    <th><?php echo $this->Paginator->sort('release_date','リリース日');?></th>
+<table id="staff_master" border="1" width="100%" cellspacing="0" cellpadding="5" bordercolor="#333333" align="center">
+  <tr class="col">
+    <th width="5%"><?php echo $this->Paginator->sort('id',"No.");?></th>
+    <th width="5%"><?php echo $this->Paginator->sort('version_no','バージョン番号');?></th>
+    <th width="10%"><?php echo $this->Paginator->sort('status','ステータス');?></th>
+    <th width="20%"><?php echo $this->Paginator->sort('title','更新タイトル');?></th>
+    <th width="50%"><?php echo $this->Paginator->sort('remarks','更新内容');?></th>
+    <th width="15%"><?php echo $this->Paginator->sort('release_date','リリース日');?></th>
   </tr>
-  <?php foreach ($datas as $key => $data): ?>
+  <?php foreach($datas as $data) { ?>
   <tr>
     <td><?php echo $data['Menu']['id'];?></td>
     <td><?php echo $data['Menu']['version_no']; ?></td>
@@ -45,21 +53,22 @@
     <td><?php echo str_replace("\n","<br />",$data['Menu']['remarks']); ?></td>
     <td><?php echo $data['Menu']['release_date']; ?></td>
   </tr>
-  <?php endforeach; ?>
+  <?php } ?>
 </table>
 
 <!-- ページネーション -->
-<div class="pageNav03" style="margin: 10px;">
 <?php
-	echo $this->Paginator->first('<< 最初', array(), null, array('class' => 'first disabled'));
-	echo $this->Paginator->prev('< 前へ', array(), null, array('class' => 'prev disabled'));
-	echo $this->Paginator->numbers(array('separator' => ''));
-	echo $this->Paginator->next('次へ >', array(), null, array('class' => 'next disabled'));
-        echo $this->Paginator->last('最後 >>', array(), null, array('class' => 'last disabled'));
+    echo $this->Paginator->numbers (
+        array (
+            'before' => $this->Paginator->hasPrev() ? $this->Paginator->first('<<').' | ' : '',
+            'after' => $this->Paginator->hasNext() ? ' | '.$this->Paginator->last('>>') : '',
+            )
+        );
 ?>
- </div>
 <!--- スタッフマスタ本体 END --->
 
 <?php echo $this->Form->end(); ?>
+<br>
+<a href="<?=ROOTDIR ?>/users/index">◀ホームへ戻る</a>
 
-<a href="/softlife2/users/index">ホームへ戻る</a>
+</div>

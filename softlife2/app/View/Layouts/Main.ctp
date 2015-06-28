@@ -1,51 +1,28 @@
-<?php
-    if($auth->loggedIn())
-    {
-        //echo $this->Html->link('ログアウト', '/users/logout/');
-    }else{
-        //echo $this->Html->link('ログイン', '/users/login/');
-        // ログイン画面へ遷移
-        //header('Location: login');
-        //exit();
-        //echo '<script type="text/javascript">location.href = "softlife2/users/login/"</script>';
-    }
-    
-    // 種別コンボセット
-    if ($result['User']['auth11'] == 1) {
-        $class = array('11'=>'大阪-人材派遣');
-        $first_class = array('11'=>'大阪-人材派遣');
-    }
-    if ($result['User']['auth12'] == 1) {
-        $class = $class + array('12'=>'大阪-住宅営業');
-        if (is_null($first_class)) {
-            $first_class = array('12'=>'大阪-住宅営業');
+<?php 
+    // 所属カンマ区切りを配列に
+    $value = explode(',', $result['User']['auth']);
+    //$this->log($value);
+    // 所属コンボセット
+    foreach($value as $val) {
+        if ($val == '11') {
+            $class['11'] = '大阪-人材派遣';
         }
-    }
-    if ($result['User']['auth21'] == 1) {
-        $class = $class + array('21'=>'東京-人材派遣');
-        if (is_null($first_class)) {
-            $first_class = array('21'=>'東京-人材派遣');
-        } 
-    }
-    if ($result['User']['auth22'] == 1) {
-        $class = $class + array('22'=>'東京-住宅営業');
-        if (is_null($first_class)) {
-            $first_class = array('22'=>'東京-住宅営業');
+        if ($val == '12') {
+            $class['12'] = '大阪-住宅営業';
         }
-    }
-    if ($result['User']['auth31'] == 1) {
-        $class = $class + array('31'=>'名古屋-人材派遣');
-        if (is_null($first_class)) {
-            $first_class = array('31'=>'名古屋-人材派遣');
+        if ($val == '21') {
+            $class['21'] = '東京-人材派遣';
         }
-    }
-    if ($result['User']['auth32'] == 1) {
-        $class = $class + array('32'=>'名古屋-住宅営業');
-        if (is_null($first_class)) {
-            $first_class = array('32'=>'名古屋-住宅営業');
+        if ($val == '22') {
+            $class['22'] = '東京-住宅営業';
         }
-    }
-    
+        if ($val == '31') {
+            $class['31'] = '名古屋-人材派遣';
+        }
+        if ($val == '32') {
+            $class['32'] = '名古屋-住宅営業';
+        }   
+    } 
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -91,9 +68,9 @@ $(function() {
     <div id="header">
         <table style="width: 100%;" border="0">
             <tr>
-                <td style="width:300px;">
-                    <a href="<?=ROOTDIR ?>/users/" class="logo">&nbsp;</a>
-                    <font size="3">
+                <td style="width:350px;">
+                    <a href="<?=ROOTDIR ?>/users/"><img src="<?=ROOTDIR ?>/img/logo.gif"></a>
+                    <font size="3" style="vertical-align: 8px;">
                         <?php echo HEADER; ?>
                     </font>
                 </td>
@@ -102,8 +79,8 @@ $(function() {
                     <ul  id="menu">
                         <li>リンク <font style='font-size:50%;vertical-align: 2px;'>▼</font>
                             <ul>
-                                <li><a href="http://www.softlife.co.jp/">会社ホームページ</a></li>
-                                <li><a href="http://softlife.co.jp/cb9/ag.cgi?">サイボウズ</a></li>
+                                <li><a href="http://www.softlife.co.jp/" target="_blank">会社ホームページ</a></li>
+                                <li><a href="http://softlife.co.jp/cb9/ag.cgi?" target="_blank">サイボウズ</a></li>
                             </ul>
                         </li>
                         <li style="width:130px;">
@@ -113,7 +90,7 @@ $(function() {
                             ?>
                                 <ul>
                                     <li><a href="<?=ROOTDIR ?>/users/passwd">パスワード変更</a></li>
-                                    <li><a href="<?=ROOTDIR ?>/menu/version">バージョン情報</a></li>
+                                    <li><a href="<?=ROOTDIR ?>/menu/version/sort:id/direction:desc">バージョン情報</a></li>
                                     <li><a href="<?=ROOTDIR ?>/users/logout">ログアウト</a></li>
                                 </ul>
                             <?php
@@ -137,22 +114,22 @@ $(function() {
                     <div id='cssmenu'>
                         <ul>
                             <li class='<?= $active1 ?>'><a href='<?=ROOTDIR ?>/users/'>ホーム<br><div>Home</div></a></li>
-                           <li class='<?= $active2 ?>'><a href='<?=ROOTDIR ?>/message/'>メッセージ<br><div>Message</div></a></li>
-                           <li class='<?= $active3 ?>'><a href='<?=ROOTDIR ?>/stuff_masters/'>スタッフ管理<br><div>Stuff Management</div></a></li>
-                           <li class='<?= $active4 ?>'><a href='<?=ROOTDIR ?>/case_management/'>案件管理<br><div>Case Management</div></a></li>
-                           <li class='<?= $active5 ?>'><a href='#'>その他<br><div>etc</div></a></li>
+                           <li class='<?= $active2 ?>'><a href='<?=ROOTDIR ?>/message/' onclick='alert("制作予定");return false;'>メッセージ<br><div>Message</div></a></li>
+                           <li class='<?= $active3 ?>'><a href='<?=ROOTDIR ?>/staff_masters/index/0'>スタッフ管理<br><div>Staff Management</div></a></li>
+                           <li class='<?= $active4 ?>'><a href='<?=ROOTDIR ?>/case_management/' onclick='alert("制作予定");return false;'>案件管理<br><div>Case Management</div></a></li>
+                           <li class='<?= $active5 ?>'><a href='' onclick='alert("制作予定")'>シフト管理<br><div>Shift Management</div></a></li>
                            <li class='<?= $active6 ?>'><a href='#'>&nbsp;<br><div>&nbsp;</div></a></li>
                            <li class='<?= $active7 ?>'><a href='#'>&nbsp;<br><div>&nbsp;</div></a></li>
                            <li class='<?= $active8 ?>'><a href='#'>&nbsp;<br><div>&nbsp;</div></a></li>
-                           <li class='<?= $active9 ?>'><a href='<?=ROOTDIR ?>/admin/'>管理者ページ<br><div>Administrator</div></a></li>
-                           <li class='<?= $active10 ?>'><a href='#'>&nbsp;<br><div>&nbsp;</div></a></li>
+                           <li class='<?= $active8 ?>'><a href='#'>&nbsp;<br><div>&nbsp;</div></a></li>
+                           <li class='<?= $active10 ?>'><a href='<?=ROOTDIR ?>/admin/'>管理者ページ<br><div>Administrator</div></a></li>
                         </ul>
                     </div>
                 </td>
-                <td style="text-align: center;width:170px;vertical-align: middle;">
+                <td style="text-align: center;width:170px;vertical-align: bottom;">
                     <?php echo $this->Form->create('Common', array('name' => 'form')); ?>
                     <?php echo $this->Form->input('class', array('name'=>'class','type'=>'select','label'=>false,'div'=>false, 
-                        'style' => '','id' => 'class','empty'=>array(0 => '選択してください'), 'selected' => $selected_class,
+                        'style' => '','id' => 'class', 'selected' => $selected_class,
                         'onChange'=>'form.submit();', 'options'=>$class)); ?>
                     <?php echo $this->Form->end(); ?>
                 </td>

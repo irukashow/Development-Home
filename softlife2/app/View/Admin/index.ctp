@@ -1,7 +1,7 @@
 <script type="text/javascript">
     onload = function() {
         document.getElementById('content').style.background='#ffffcc';
-        document.getElementById('content').style.height='600px';
+        document.getElementById('content').style.height='800px';
         //document.getElementById('cssmenu').style.background='#ffffcc';
     }
 </script>
@@ -15,26 +15,78 @@
     <a href="" target="_blank"></a>
 </div>
 
-<div style="width:30%; margin-top: 20px;margin-left: 30px;">
+<div style="margin-top: 20px;">
 <?php echo $this->Form->create('User'); ?>
-    <fieldset style="border: none; margin-bottom: 20px;">
-        <legend style="font-size: 150%;color: red;"><?php echo __('ユーザー管理'); ?></legend>
-        <?php echo $this->Html->link('ユーザー一覧', '/account/'); ?>
-        <br><br>
-        <?php echo $this->Html->link('新規ユーザ登録', '/users/add/'); ?>
-        <br><br>
-        <?php echo $this->Html->link('ユーザー情報更新', '/users/edit/'); ?>
-        <br><br>
-    
-        <legend style="font-size: 150%;color: red;margin-top: 5px;margin-bottom: 5px;"><?php echo __('システム管理'); ?></legend>
-        <?php echo $this->Html->link('バージョン情報入力ページ', './version/'); ?>
-        <br><br>
-        <?php echo $this->Html->link('バージョン更新情報', '/version_remarks/'); ?>
-        <br><br>
-        <?php echo $this->Html->link('スタッフマスタ履歴', '/stuffmaster_log/'); ?>
-        <br><br>
-        <?php echo $this->Html->link('ログイン履歴', '/login_log/'); ?>
-         <br><br>
+    <fieldset style="border: none; margin-bottom: 20px;height: 300px;">
+        <table id='admin' border="0" width="100%" cellspacing="2" cellpadding="10" bordercolor="#459ed2" align="center" style="background-color: white;">
+            <tr style="height: 40px;">
+                <th width="20%">
+                    <legend style=""><?php echo __('ユーザー管理'); ?></legend>
+                </th>
+                <th width="20%">
+                    <legend style=""><?php echo __('システム管理'); ?></legend>
+                </th>
+                <th width="20%">
+                    <legend style=""><?php echo __('システム履歴情報'); ?></legend>
+                </th>
+                <th width="20%">
+                    <legend style=""><?php echo __('マスタ管理'); ?></legend>
+                </th>
+                <th width="20%"></th>
+            </tr>
+            <tr>
+                <td>
+                    <?php echo $this->Html->link('▶ユーザー一覧', '/users/view'); ?>
+                </td>
+                <td>
+                    <?php echo $this->Html->link('▶管理者からのお知らせ入力ページ', './admin_info'); ?>
+                </td>
+                <td>
+                    <?php echo $this->Html->link('▶ログイン履歴', '/log/login/sort:created/direction:desc'); ?>
+                </td>
+                <td>
+                    <?php echo $this->Html->link('▶項目マスタ', '/master/index'); ?>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <?php echo $this->Html->link('▶ユーザー登録（新規）', '/users/add/'); ?>
+                </td>
+                <td>
+                    <?php echo $this->Html->link('▶バージョン情報入力ページ', './version/'); ?>
+                </td>
+                <td>
+                    <?php echo $this->Html->link('▶スタッフマスタ更新履歴', '/log/staff_master'); ?>
+                </td>
+                <td>
+                    <?php echo $this->Html->link('▶スタッフ職種マスタ', '/master/shokushu'); ?>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td width="15%">
+                    <?php echo $this->Html->link('▶ユーザー登録（更新）', '/users/edit/'); ?>
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    <?php echo $this->Html->link('▶バージョン更新履歴', '/menu/version'); ?>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                </td>
+                <td></td>
+            </tr>
+        </table>
 
     </fieldset>
     <?php echo $this->Form->end(); ?>
