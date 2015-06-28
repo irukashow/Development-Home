@@ -398,7 +398,7 @@ class StaffMastersController extends AppController {
                 } else {
                     $page = 1;
                 }
-                $this->redirect(array('action' => 'profile', $flag, $staff_id, $page));
+                $this->redirect(array('action' => 'profile', $flag, $staff_id, 'page' => $page));
                 //$this->StaffMemo->save($this->request->data);
                 //$this->log($this->StaffMemo->getDataSource()->getLog(), LOG_DEBUG);
                 //$this->redirect($this->referer());
