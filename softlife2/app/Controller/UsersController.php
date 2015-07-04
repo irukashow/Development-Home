@@ -43,7 +43,11 @@ class UsersController extends AppController {
             // 最終ログイン時刻
             $last_login = $this->LoginLogs->find('first', array('fields' => array('created'), 
                 'conditions' => array('username' => $this->Auth->user('username'), 'status' => 'login'), 'order' => array('id' => 'desc')));
-            $this->set('last_login', $last_login['LoginLogs']['created']);
+            if (!is_null($last_login['LoginLogs']['created'])) {
+                $this->set('last_login', $last_login['LoginLogs']['created']);
+            } else {
+                $this->set('last_login', '');
+            }
             // 受信メッセージ一覧の表示
             $this->paginate = array(
                 'AdminInfo' => array(
@@ -406,8 +410,13 @@ class UsersController extends AppController {
                 $username = $this->Auth->user('username');
                 $conditions = array('username' => $username);
                 $result = $this->User->find('first', array('conditions' => $conditions));
-                $first_class = explode(',', $result['User']['auth']);
-                $this->Session->write('selected_class', $first_class[1]);
+                if (!empty($result['User']['auth'])) {
+                    $first_class = explode(',', $result['User']['auth']);
+                    $this->Session->write('selected_class', $first_class[1]);
+                } else {
+                    $this->Session->setFlash('権限がありません。');
+                    $this->redirect($this->Auth->logout());
+                }
                 //$this->log($first_class[1]);
     
                 $this->redirect($this->Auth->redirect());

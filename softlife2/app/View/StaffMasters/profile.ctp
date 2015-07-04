@@ -4,10 +4,10 @@
     echo $this->Html->script('jquery-1.9.1');
     echo $this->Html->script('station');
     echo $this->Html->script('lightbox');
-    echo $this->Html->script('jquery.lazyload.min');
     echo $this->Html->script('http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js');
     echo $this->Html->css('staffmaster');
     echo $this->Html->css('lightbox');
+    echo $this->Html->css(array('print'),'stylesheet',array('media' => 'print'));
 ?>
 <?php require('profile_element.ctp'); ?>
 <?php require('common.ctp'); ?>
@@ -43,7 +43,7 @@ window.onload = function(){
 <table id='profile' border="0" style="margin:10px;width:98%;">
     <tr>
         <td style="width:50%;vertical-align: top;">
-            <div style="color: whitesmoke;background-color: #45bcd2;text-shadow: 1px 1px 3px #666666;border:1px solid #0099cc;padding:5px;vertical-align: middle;padding-right: 5px;">
+            <div id="header_profile" style="">
                 <font style="font-size: 150%;">■登録者情報</font>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <font style="font-size: 100%;">登録年月日：
@@ -62,8 +62,8 @@ window.onload = function(){
                         <tr>
                             <td style='width:50%;'>
                                 <?=$data['StaffMaster']['name_sei2'] ?>&nbsp;<?=$data['StaffMaster']['name_mei2'] ?><br>
-                                <div style="float:left;">
-                                    <font style='font-size:150%;'>
+                                <div id="name" style="float:left;">
+                                    <font style='font-size: 150%;'>
                                         <?=$data['StaffMaster']['name_sei'] ?>&nbsp;<?=$data['StaffMaster']['name_mei'] ?>&nbsp;
                                         <?=  getAge(str_replace('-','',$data['StaffMaster']['birthday'])) ?>歳&nbsp;&nbsp;
                                     </font>    
@@ -94,7 +94,7 @@ window.onload = function(){
                             <td style='background-color:#ffcc66;'>就業状況：&nbsp;<?='＜不明＞' ?></td>
                         </tr>
                         <tr>
-                            <td style=''>
+                            <td id='shokushu_shoukai'>
                                 <font style='font-size:140%;'><?=getShokushu2($data['StaffMaster']['shokushu_shoukai']) ?></font><br>
                             </td>
                         </tr>
@@ -204,7 +204,7 @@ window.onload = function(){
                     <table border='1' cellspacing="0" cellpadding="5" style="width:100%;margin-top: 10px;border-spacing: 0px;">
                         <tr>
                             <td style='background-color: #e8ffff;width:30%;'>役割</td>
-                            <?php $list_role = array('0'=>'その他', '1'=>'メイン', '2'=>'サブ'); ?>
+                            <?php $list_role = array('0'=>'', '1'=>'メイン', '2'=>'サブ'); ?>
                             <td style='width:70%;'><?=$list_role[$data['StaffMaster']['role']] ?></td>
                         </tr>
                         <tr>
@@ -299,7 +299,7 @@ window.onload = function(){
             
         </td>
         <td style="width:50%;vertical-align: top;padding-left: 5px;">
-            <div style="color: black;background-color: #ffff99;border:1px solid orange;padding:5px;vertical-align: middle;padding-left: 10px;margin-bottom: 10px;">
+            <div id="editbox" style="color: black;background-color: #ffff99;border:1px solid orange;padding:5px;vertical-align: middle;padding-left: 10px;margin-bottom: 10px;">
                 <?php echo $this->Form->submit('編　集', array('name' => 'submit','div' => false)); ?>
                 &nbsp;&nbsp;
                 <?php $comment = __('本当に登録解除してよろしいですか？', true); ?>
@@ -322,8 +322,8 @@ window.onload = function(){
             <br>
             <!--
             <iframe width="100%" height="200px" src="<?=ROOTDIR ?>/staff_masters/memo/<?=$data['StaffMaster']['id'] ?>" id="memo" frameborder='0' scrolling="yes" style="margin-bottom: 10px;"></iframe>
-            -->
             <br>
+            -->
             <div style="overflow-y:scroll;height:200px;margin-bottom: 10px;">
             <table border='1' cellspacing="0" cellpadding="2" style="width:100%;margin-top: 0px;margin-bottom: 10px;border-spacing: 0px;">
                 <tr>
@@ -362,8 +362,8 @@ window.onload = function(){
             </table>
             
             <!-- メールボックス -->
-            <font style="font-size: 120%;">メッセージボックス</font>
-            <table border='1' cellspacing="0" cellpadding="5" style="width:100%;margin-top: 0px;margin-bottom: 10px;border-spacing: 0px;">
+            <font id="title_messagebox" style="font-size: 120%;">メッセージボックス</font>
+            <table border='1' cellspacing="0" cellpadding="5" style="width:100%;margin-top: 0px;margin-bottom: 10px;border-spacing: 0px;" id="messagebox">
                 <tr>
                     <td style='background-color: #e8ffff;width:30%;'>日付</td>
                     <td style='background-color: #e8ffff;width:70%;'>タイトル</td>
